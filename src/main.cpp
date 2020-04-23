@@ -5,94 +5,59 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <thread>
 
+#include "MessageQueue.h"
 #include "SpinLattice.h"
 
 
-FILE *fp;
-FILE *fpcorr;
-FILE *fpMetro;
-FILE *fpBath;
-FILE *fpCluster;
-
-int     ising(int nb, int meas_sweeps, int method, FILE *fperror);
-void    rand_spin(int size, int *m, int *n);
-double  compute_deltaE(int size, int spin[size][size], int m, int n, double J, double B);
-double  compute_energy(int size, int spin[size][size], double J, double B);
-void    print_spin_lattice(int size, int spin[size][size]);
-void    fprint_spin_lattice(int size, int spin[size][size], FILE *fp);
-double  average(int N, double array[N]);
-double  average_lattice(int N, int M, int array[N][M]);
-double  cor_t(int N, float array[N], int t, double mean, double sq_mean);
-void    exact_2d(double T, double B, double *E, double *M);
-double  rf(double x, double y, double z);
-double  ellf(double phi, double ak);
-double  min(double x, double y, double z);
-double  max(double x, double y, double z);
-
 int main ()
 {
-    system("chcp 65001  > nul");
-    srand(time(NULL));
+    //==================================================================================
+    //   INPUT
+    //----------------------------------------------------------------------------------
+    int size = 10;                     // size of the lattice
+    double J = 1.;                      // coupling constant
+    double B = 0.;                      // external magnetic field
+    double T = 2.26;                    // temperature
+    int blockSize = 50;                 // number of measurements in each block
+    int numBlocks = 100;                // number of subsequent blocks which are used for error estimation
 
-    int metropolis_sweeps = 80000000;
-    int heatbath_sweeps = 80000000;
-    int cluster_sweeps = 800000;
-    int metropolis_nb = 500000;
-    int heatbath_nb = 800000;
-    int cluster_nb = 50;
+    //int num_meas = meas_sweeps / block_size;
+    //----------------------------------------------------------------------------------
+    
+    std::vector<std::vector<int>> llattice(5, std::vector<int>(5, 0));
+    SpinLattice lattice = SpinLattice(size);
 
-    //fpMetro = fopen("metro_mag.txt", "w" );
-    //fpBath = fopen("bath_mag.txt", "w" );
-    //fpCluster = fopen("cluster_mag.txt", "w" );
+    std::ofstream fCluster;
+    fCluster.open("cluster_measurements.txt");
 
     std::cout << "=======================\n";
-    printf("  Metropolis method\n");
-    printf("=======================\n");
-    fprintf(fpMetro, "Metropolis method\n");
-    fprintf(fpMetro, "%i sweeps\n", metropolis_sweeps);
-    ising(metropolis_nb, metropolis_sweeps, 1, fpMetro);
+    std::cout << " Single cluster method\n";
+    std::cout << "=======================\n";
+    fCluster << "Single cluster method\n";
 
-    printf("=======================\n");
-    printf("  Heat bath method\n");
-    printf("=======================\n");
-    fprintf(fpBath, "Heat bath method\n");
-    fprintf(fpBath, "%i sweeps\n", heatbath_sweeps);
-    ising(heatbath_nb, heatbath_sweeps, 2, fpBath);
+    MessageQueue<double> queue;
+    std::thread simulationThread(&SpinLattice::simulate, &lattice, J, B, T, blockSize, &queue);
+    //lattice.simulate(J, B, T, blockSize, &queue);
 
-    printf("=======================\n");
-    printf(" Single cluster method\n");
-    printf("=======================\n");
-    fprintf(fpCluster, "Single cluster method\n");
-    fprintf(fpCluster, "%i sweeps\n", cluster_sweeps);
-    ising(cluster_nb, cluster_sweeps, 3, fpCluster);
+    simulationThread.join();
 
+    fCluster.close();
 }
 
+
+
+
+
+
+
+
+/*
 int ising(int nb, int meas_sweeps, int method, FILE *fperror)
 {
-
-    //=====================================
-    //   INPUT
-    //-------------------------------------
-    int size = 100;
-    double J = 1.;
-    double B = 0.;
-    double T = 2.26;
-    //int method = 3;
-    //int meas_sweeps = sweeps;
-    int block_size = nb;
-    int num_meas = meas_sweeps / block_size;
-    int term_sweeps;
-    if (method == 1 || method == 2){
-        term_sweeps = 600000;
-    }
-    if (method == 3){
-        term_sweeps = 5000;
-    }
-    long int sweeps = meas_sweeps + term_sweeps;
-    //-------------------------------------
-    SpinLattice spin = SpinLattice(size);
+    
     double e_mean = 0., e_sq_mean = 0., e_block_mean = 0., mag_mean = 0., mag_sq_mean = 0., mag_block_mean = 0.;
     double heat_cap_mean;
     double mag_density_mean;
@@ -122,7 +87,8 @@ int ising(int nb, int meas_sweeps, int method, FILE *fperror)
     printf("Block size: %i\n", block_size);
     printf("Number of measurements: %i\n", num_meas);
     printf("Number of sweeps: %i\n", block_size*num_meas);
-
+*/
+    /*
     // initialize random spins
     for(int j=0; j<size; j++) {
       for (int i = 0; i<size; i++) {
@@ -131,7 +97,9 @@ int ising(int nb, int meas_sweeps, int method, FILE *fperror)
         mag = average_lattice(size, size, spin);
       }
     }
+    */
 
+    /*// perform measurements
     for (long int t = 0; t < sweeps; t++){
         switch(method){
         case 1:
@@ -235,14 +203,16 @@ int ising(int nb, int meas_sweeps, int method, FILE *fperror)
             mag_block_mean = 0.;
             pos++;
         }
-    }
+    }*/
 
-    exact_2d(T, B, &energy_ex, &mag_ex);
+    // compute exact solution
+    //exact_2d(T, B, &energy_ex, &mag_ex);
 
-    print_spin_lattice(size, spin);
+    //print_spin_lattice(size, spin);
 
     //fprint_spin_lattice(size, spin, fp);
 
+/*
     // ERROR ESTIMATION
     // ====================
 
@@ -283,10 +253,6 @@ int ising(int nb, int meas_sweeps, int method, FILE *fperror)
         sigma_susc += (pow(pow((mag_JK[s] - mag_mean), 2)*pow(size, 4)/T - susc_JK, 2) * (num_meas - 1.)/num_meas);
     }
 
-    // naive method
-    //sigma_e = (e_sq_mean/(double) meas_sweeps - pow(e_mean, 2));
-    //sigma_mag = (mag_sq_mean/(double) meas_sweeps - pow(mag_mean, 2));
-
     printf("Average energy density:         %.6f +/- %.6f\n", e_mean, sqrt(sigma_e));
     printf("Average heat capacity:          %.6f +/- %.6f\n", heat_JK, sqrt(sigma_heat));
     printf("Average magnetization density:  %.6f +/- %.6f\n", mag_mean, sqrt(sigma_mag));
@@ -299,10 +265,11 @@ int ising(int nb, int meas_sweeps, int method, FILE *fperror)
     free(mag_mem);
     return 1;
 
-}
+}*/
 
 // Compute the change in energy caused by transition of a spin from spin down to spin up.
 // For computing the change in energy caused by flipping of one spin, use -1*spin[m][n] * compute_deltaE()
+/*
 double compute_deltaE(int size, int spin[size][size], int m, int n, double J, double B) {
     int up = (m + size - 1) % size;
     int down = (m + size + 1) % size;
@@ -310,22 +277,10 @@ double compute_deltaE(int size, int spin[size][size], int m, int n, double J, do
     int left = (n + size - 1) % size;
     int NNspins = spin[up][n] + spin[down][n] + spin[m][right] + spin[m][left];
     return  -2. * J * (NNspins + B);
-}
+}*/
 
-// Compute the energy of the lattice
-double compute_energy(int size, int spin[size][size], double J, double B) {
-    double energy = 0;
-    int up, right;
-    for (int j = 0; j < size; j++){
-        for (int i = 0; i < size; i++) {
-            int up = (j + size - 1) % size;
-            int right = (i + size + 1) % size;
-            energy = energy + spin[j][i] * (-1. * J * (spin[up][i] + spin[j][right]) + B);
-        }
-    }
-    return energy;
-}
 
+/*
 void print_spin_lattice(int size, int spin[size][size]){
     for (int j = 0; j < size; j++){
         for (int i = 0; i < size; i++) {
@@ -354,7 +309,8 @@ void fprint_spin_lattice(int size, int spin[size][size], FILE *fp){
         fprintf(fp, "\n");
     }
 }
-
+*/
+/*
 double average(int N, double array[N]) {
     double sum = 0;
     for (int i = 0; i < N; i++){
@@ -362,8 +318,9 @@ double average(int N, double array[N]) {
     }
 
     return sum;
-}
+}*/
 
+/*
 double average_lattice(int N, int M, int array[N][M]){
     double sum = 0;
     for (int j = 0; j < N; j++){
@@ -372,19 +329,7 @@ double average_lattice(int N, int M, int array[N][M]){
         }
     }
     return (sum / (N * M));
-}
-
-// computes C[t] of an array
-double cor_t(int N, float array[N], int t, double mean, double sq_mean)
-{
-    double result = 0;
-    for (int i = 0; i < (N - t); i++)
-    {
-        result += array[i] * array[i + t];
-    }
-    result = (result / (N - t) - pow(mean, 2)) / (sq_mean - pow(mean, 2));
-    return result;
-}
+}*/
 
 /***********
 * exact_2d *
