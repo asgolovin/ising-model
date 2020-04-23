@@ -1,10 +1,12 @@
-#include <math.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdarg.h>
-#include <stdbool.h>
+//#include <stdlib.h>
+//#include <time.h>
+//#include <stdarg.h>
+//#include <stdbool.h>
+
 #include <vector>
 #include <iostream>
+
+#include "SpinLattice.h"
 
 
 FILE *fp;
@@ -388,6 +390,8 @@ double cor_t(int N, float array[N], int t, double mean, double sq_mean)
 * exact_2d *
 ***********/
 
+/*
+
 void exact_2d(double T, double B, double *E, double *M) {
   double x, y;
   double z, Tc, K, K1;
@@ -411,12 +415,12 @@ void exact_2d(double T, double B, double *E, double *M) {
 
   return;
 }
-
+*/
 
 /*******
 * ellf *      Elliptic integral of the 1st kind ( c.f. Numerical Recipes )
 *******/
-
+/*
 double ellf(double phi, double ak){
   double ellf;
   double s;
@@ -480,3 +484,4 @@ double max(double x, double y, double z)
 
   return m;
 }
+*/

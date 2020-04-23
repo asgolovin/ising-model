@@ -7,20 +7,20 @@ class SpinLattice{
     public:
         // constructor / destructor
         SpinLattice(int size);
-        ~SpinLattice();
+        ~SpinLattice(){}
 
         // getters / setters
         void setRandomSpins();
         double getMagnetization();
-        double getEnergy();
+        double getEnergy(double J, double B);
 
         // lattice manipulation
         void flip(int i, int j);
 
 
     private:
-        std::unique_ptr<std::vector<std::vector<int>>> _lattice;
         int _size;
-}
+        std::vector<std::vector<int>> _lattice;
+};
 
 #endif
