@@ -90,7 +90,7 @@ int ising(int nb, int meas_sweeps, int method, FILE *fperror)
     }
     long int sweeps = meas_sweeps + term_sweeps;
     //-------------------------------------
-    int spin[size][size];
+    SpinLattice spin = SpinLattice(size);
     double e_mean = 0., e_sq_mean = 0., e_block_mean = 0., mag_mean = 0., mag_sq_mean = 0., mag_block_mean = 0.;
     double heat_cap_mean;
     double mag_density_mean;
