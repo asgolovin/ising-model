@@ -1,1 +1,3 @@
 build/*
+cluster_measurements.txt
+.vscode/*
