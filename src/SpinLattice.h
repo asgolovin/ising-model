@@ -17,6 +17,9 @@ class SpinLattice{
         void setRandomSpins();
         double getMagnetization();
         double getEnergy(double J, double B);
+        int getSize() { return _size; }
+        int getSpin(int i, int j) { return _lattice[i][j]; }
+        void setSpin(int i, int j, int s) { _lattice[i][j] = s; }
 
         // lattice manipulation
         void flip(int i, int j);

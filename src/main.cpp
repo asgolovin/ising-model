@@ -7,10 +7,12 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
+#include <utility>
 
 #include "MessageQueue.h"
 #include "SpinLattice.h"
 #include "evaluate.h"
+#include "simulate.h"
 
 
 int main ()
@@ -42,7 +44,7 @@ int main ()
     auto queue = MessageQueue<std::vector<double>>();
     std::vector<double> parameters {J, B, T};
 
-    std::thread simulationThread(&SpinLattice::simulate, &lattice, parameters, blockSize, &queue);
+    std::thread simulationThread(&simulate, &lattice, parameters, blockSize, &queue);
     std::thread evaluationThread(&evaluate, parameters, &queue);
 
     simulationThread.join();
