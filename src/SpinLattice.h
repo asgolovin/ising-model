@@ -20,7 +20,7 @@ class SpinLattice{
 
         // lattice manipulation
         void flip(int i, int j);
-        void simulate(double J, double B, double T, int blockSize, MessageQueue<double> *queue);
+        void simulate(std::vector<double> parameters, int blockSize, MessageQueue<std::vector<double>> *queue);
 
     private:
         int _size;

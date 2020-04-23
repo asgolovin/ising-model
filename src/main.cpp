@@ -10,6 +10,7 @@
 
 #include "MessageQueue.h"
 #include "SpinLattice.h"
+#include "evaluate.h"
 
 
 int main ()
@@ -31,18 +32,21 @@ int main ()
     SpinLattice lattice = SpinLattice(size);
 
     std::ofstream fCluster;
-    fCluster.open("cluster_measurements.txt");
+    fCluster.open("../logs/cluster_measurements.txt");
 
     std::cout << "=======================\n";
     std::cout << " Single cluster method\n";
     std::cout << "=======================\n";
     fCluster << "Single cluster method\n";
 
-    MessageQueue<double> queue;
-    std::thread simulationThread(&SpinLattice::simulate, &lattice, J, B, T, blockSize, &queue);
-    //lattice.simulate(J, B, T, blockSize, &queue);
+    auto queue = MessageQueue<std::vector<double>>();
+    std::vector<double> parameters {J, B, T};
+
+    std::thread simulationThread(&SpinLattice::simulate, &lattice, parameters, blockSize, &queue);
+    std::thread evaluationThread(&evaluate, parameters, &queue);
 
     simulationThread.join();
+    evaluationThread.join();
 
     fCluster.close();
 }

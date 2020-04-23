@@ -5,6 +5,7 @@
 #include "SpinLattice.h"
 #include "MessageQueue.h"
 
+
 SpinLattice::SpinLattice(int size) :
     _size(size), _lattice(size, std::vector <int> (size, 0))
 {
@@ -21,9 +22,7 @@ void SpinLattice::setRandomSpins(){
         for (int j = 0; j < _size; j++){
             // map {0, 1} to {-1, 1}
             _lattice[i][j] = 2 * distribution(rng) - 1;
-            std::cout << _lattice[i][j] << " ";
         }
-        std::cout << "\n";
     }
 }
 
@@ -70,25 +69,26 @@ void SpinLattice::flip(int i, int j){
 // Use the single cluster method to simulate the time evolution of the lattice.
 // Average measurements of energy and magnetizetion for a number of steps given by blockSize and
 // send the averages to the queue. 
-void SpinLattice::simulate(double J, double B, double T, int blockSize, MessageQueue<double> *queue){
+void SpinLattice::simulate(std::vector<double> parameters, int blockSize, MessageQueue<std::vector<double>> *queue){
     double energy, magnetization; 
+    double J = parameters[0];
+    double B = parameters[1];
+    double T = parameters[2];
 
     // prepare a random number generator
     std::random_device rd;
     std::mt19937 rng(rd());
     std::uniform_int_distribution<int> distribution(0, _size-1);
 
-    energy = this->getEnergy(J, B);
-    magnetization = this->getMagnetization();
-
-    std::cout << energy << "\n";
-    std::cout << magnetization << "\n";
+    energy = getEnergy(J, B);
+    magnetization = getMagnetization();
 
     for (int i = 0; i < _size; i++){
         for (int j = 0; j < _size; j++){
-            std::cout << _lattice[i][j] << " ";
+            //std::cout << _lattice[i][j] << " ";
         }
-        std::cout << "\n";
+        std::vector<double> msg {012., 1., 2.};
+        queue->send(std::move(msg));
     }
 
     /*while(true){
