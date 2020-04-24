@@ -4,6 +4,7 @@
 #include "MessageQueue.h"
 #include <vector>
 
-void evaluate(std::vector<double> parameters, MessageQueue<std::vector<double>> *queue);
+void evaluate(std::vector<double> parameters,
+              MessageQueue<std::vector<double>> *queue);
 
 #endif

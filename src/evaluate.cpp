@@ -6,6 +6,6 @@ void evaluate(std::vector<double> parameters,
   while (true) {
     auto msg = queue->receive();
     std::cout << "beep! Message from SpinLattice!\n";
-    std::cout << "Magnetization: " << msg[0] << "    Energy: " << msg[1] << "\n";
+    std::cout << "Magnetization: " << msg[0] << "  Energy: " << msg[1] << "\n";
   }
 }
