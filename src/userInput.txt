@@ -17,7 +17,7 @@ That's all there is to it! The Ising model is quite simple, but very powerful. I
 to learn more, the Wikipedia article is very comprehensive: 
 https://en.wikipedia.org/wiki/Ising_model
 @
-Let's start! Please enter the size of the lattice (10-300)
+Let's start! Please enter the size of the lattice (10-500)
 @
 Now set the coupling constant J in the range from -1 to +1.
 J > 0: ferromagnet
@@ -34,5 +34,8 @@ This is called a phase transition.
 
 If J = +1 and B = 0, the phase transition should happen at T = 2.26K. Try entering values above 
 and below this point! 
+@
+Select the simulation algorithm: single cluster (enter c) or heatbath (enter h). Single cluster 
+gives precise measurements very fast, but the heatbath looks nice. 
 @
 Excelent! Starting the simulation...

@@ -5,12 +5,14 @@
 #include <vector>
 
 #include "userInput.h"
+#include "simulate.h"
 
 void userInput(std::string filename, int &size, double &J, double &B,
-               double &T) {
+               double &T, Method &method) {
   std::vector<std::string> msg;
   std::ifstream file(filename);
   std::string input;
+  char m;
   // check for file availability
   if (file) {
     // loop over all lines in the file
@@ -24,8 +26,8 @@ void userInput(std::string filename, int &size, double &J, double &B,
     std::cout << msg[1];
     getline(std::cin, input);
     std::stringstream(input) >> size;
-    while (size > 300 || size < 10) {
-      std::cout << "Wrong input! Enter a number between 10 and 200:\n";
+    while (size > 500 || size < 10) {
+      std::cout << "Wrong input! Enter a number between 10 and 500:\n";
       getline(std::cin, input);
       std::stringstream(input) >> size;
     }
@@ -58,8 +60,19 @@ void userInput(std::string filename, int &size, double &J, double &B,
       getline(std::cin, input);
       std::stringstream(input) >> T;
     }
-    // final
+    // ask about the simulation method 
     std::cout << msg[5];
+    getline(std::cin, input);
+    std::stringstream(input) >> m;
+    while (m != 'c' && m != 'C' && m != 'h' && m != 'H') {
+      std::cout << "Wrong input! Enter c for the single cluster method or h for heatbath method:\n";
+      getline(std::cin, input);
+      std::stringstream(input) >> m;
+    }
+    if (m == 'c' || m == 'C') method = Method::cluster;
+    if (m == 'h' || m == 'H') method = Method::heatbath;
+    // final
+    std::cout << msg[6];
   } else {
     std::cout << "Couldn't open input file :(\nLoading defalt values\n";
   }

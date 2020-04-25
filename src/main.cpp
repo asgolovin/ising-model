@@ -25,14 +25,19 @@ int main() {
   double T = 2.26;                  // temperature (defalt)
   int blockSize = 50;               // number of measurements in each block
   int numBlocks = 100;              // number of subsequent blocks used for error estimation
+  Method method;                    // simulation method: single cluster or heatbath
   std::string inputFileName = "../src/userInput.txt";
-  SpinLattice lattice = SpinLattice(size);
   auto queue = MessageQueue<std::vector<double>>();
   std::vector<double> parameters;
   
   // get user input  
-  userInput(inputFileName, size, J, B, T);
+  userInput(inputFileName, size, J, B, T, method);
+  SpinLattice lattice = SpinLattice(size);
   parameters = {J, B, T};
+  // select display update time 
+  int updateTime = 300;
+  if (method == Method::cluster) updateTime = 300;
+  else if (method == Method::heatbath) updateTime = 50;
 
   std::cout << "\n";
   std::cout << "=================================================\n";
@@ -44,9 +49,9 @@ int main() {
   std::cout << "=================================================\n";
   
   // start the simulation and evaluation
-  std::thread simulationThread(&simulate, &lattice, parameters, blockSize, &queue);
+  std::thread simulationThread(&simulate, &lattice, parameters, blockSize, &queue, method);
   std::thread evaluationThread(&evaluate, parameters, numBlocks, size, &queue);
-  std::thread displayThread(&display, &lattice);
+  std::thread displayThread(&display, &lattice, 50);
 
   simulationThread.join();
   evaluationThread.join();

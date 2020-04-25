@@ -63,6 +63,15 @@ double SpinLattice::getEnergy(double J, double B) {
   return energy / (_size * _size);
 }
 
+double SpinLattice::deltaEnergy(double J, double B, int i, int j){
+  int up = (i + _size - 1) % _size;
+  int down = (i + _size + 1) % _size;
+  int right = (j + _size + 1) % _size;
+  int left = (j + _size - 1) % _size;
+  int NNspins = _lattice[up][j] + _lattice[down][j] + _lattice[i][right] + _lattice[i][left];
+  return  -2. * J * (NNspins + B);
+}
+
 // Flip the spin at position (i, j)
 void SpinLattice::flip(int i, int j) {
   std::lock_guard<std::mutex> lock(_mutex);

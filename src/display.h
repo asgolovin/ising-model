@@ -3,7 +3,7 @@
 
 #include "SpinLattice.h"
 
-void display(SpinLattice *lattice);
+void display(SpinLattice *lattice, int waitTime);
 
 
 #endif
