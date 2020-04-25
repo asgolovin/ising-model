@@ -52,7 +52,7 @@ If `J > 0` and the temperature is below the critical value, there will be more m
 
 The program makes use of concurrency to simultaneously update the lattice and evaluate and display results. It is structured around the `SpinLattice` object, which is used to represent and modify the lattice. All methods which read or modify the lattice are protected by a private mutex and `guard_lock`s to enable concurrent programming.
 
-First, the user is asked to enter input parameters: the size of the lattice, the coupling constant `J`, the magnetic field `B` and the temperature `T`. The program ensures that the given values are valid and lie in a reasonable range. He can also choose between two simulation algoritms: the single cluster method [1] and the heat bath method.
+First, the user is asked to enter input parameters: the size of the lattice, the coupling constant `J`, the magnetic field `B` and the temperature `T`. The program ensures that the given values are valid and lie in a reasonable range. The user can also choose between two simulation algoritms: the single cluster method [1] and the heat bath method.
 
 After that, it launches three threads for simulation, evaluation and display. The lattice is passed by pointer to the simulation thread and the display thread. Additionally, the simulation and evaluation threads communicate with each other through a `MessageQueue`. 
 
