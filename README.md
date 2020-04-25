@@ -1,6 +1,6 @@
 # 2D Ising model
 
-This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1]
+This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] 
 
 ## Dependencies for Running Locally
 * cmake >= 2.8
@@ -23,7 +23,7 @@ This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising
 3. Compile: `cmake .. && make`
 4. Run it: `./ising-model`.
 
-## A Bit of Phyics
+## A Bit of Physics
 
 If you take a refrigerator magnet and heat it up, it will suddenly lose its magnetic properties at a specific temperature. But what does temperature have to do with magnetism? 
 
