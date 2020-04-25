@@ -37,8 +37,8 @@ High temperature introduces chaos into the system. Even if the parallel orientat
 
 ([image source](https://en.wikipedia.org/wiki/Curie_temperature))
 
-The Ising model is a simple model that can describe phase transition from a paramagnetic unodrered state
-to a ferromagnetic ordered state. In the model, the magnetic moments are binary and can only point up (+1) or down (-1). Magnetic moments sit on a 2D lattice, their interaction with neighbors is described by the coupling constant `J`. 
+The Ising model is a simple model that can describe phase transition from an ordered state
+to an unodrered state. In the model, the magnetic moments (we will also call them spins) are binary and can only point up (+1) or down (-1). Magnetic moments sit on a 2D lattice, their interaction with neighbors is described by the coupling constant `J`. 
 
 * `J > 0`: parallel orientation is preferable
 * `J < 0`: antiparallel orientation is preferable
