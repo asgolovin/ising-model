@@ -64,7 +64,10 @@ double SpinLattice::getEnergy(double J, double B) {
 }
 
 // Flip the spin at position (i, j)
-void SpinLattice::flip(int i, int j) { _lattice[i][j] *= -1; }
+void SpinLattice::flip(int i, int j) {
+  std::lock_guard<std::mutex> lock(_mutex);
+  _lattice[i][j] *= -1; 
+}
 
 // Updates an OpenCV 8-bit 1 channel matrix (CV_8SC1)
 void SpinLattice::updateMat(cv::Mat &image) {
