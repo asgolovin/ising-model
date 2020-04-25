@@ -9,6 +9,9 @@
 
 class SpinLattice {
 public:
+  
+  std::vector<std::vector<int>> _lattice;
+
   // constructor / destructor
   SpinLattice(int size);
   ~SpinLattice() {}
@@ -28,7 +31,6 @@ public:
 
 private:
   int _size;
-  std::vector<std::vector<int>> _lattice;
   std::mutex _mutex;
 };
 

@@ -6,7 +6,7 @@
 #include "SpinLattice.h"
 
 SpinLattice::SpinLattice(int size)
-    : _size(size), _lattice(size, std::vector<int>(size, 0)) {
+    : _size(size), _lattice(size, std::vector<int>(size, 1)) {
   // initialize the lattice with random spins
   this->setRandomSpins();
 }
@@ -53,9 +53,8 @@ double SpinLattice::getEnergy(double J, double B) {
       int up = (i + _size - 1) % _size;
       int right = (j + _size + 1) % _size;
       // add up the energy of single spins
-      energy =
-          energy + _lattice[j][i] *
-                       (-1. * J * (_lattice[up][i] + _lattice[j][right]) + B);
+      energy += _lattice[i][j] *
+                       (-1. * J * (_lattice[up][j] + _lattice[i][right]) + B);
     }
   }
   return energy / (_size * _size);

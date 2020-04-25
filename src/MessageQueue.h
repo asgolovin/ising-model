@@ -4,6 +4,7 @@
 #include <condition_variable>
 #include <deque>
 #include <mutex>
+#include <vector>
 
 template <class T> class MessageQueue {
 public:
@@ -13,12 +14,15 @@ public:
     _cond.notify_one();
   }
 
-  T receive() {
+  std::vector<T> receive() {
+    std::vector <T> msg;
     std::unique_lock<std::mutex> uLock(_mutex);
     _cond.wait(uLock, [this] { return !_queue.empty(); });
-    // use FIFO order
-    T msg = std::move(_queue.front());
-    _queue.pop_front();
+    // return all new messages
+    for (int i = 0; i < _queue.size(); i++){
+      msg.emplace_back(std::move(_queue.front()));
+      _queue.pop_front();
+    }
     return msg;
   }
 

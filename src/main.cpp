@@ -8,23 +8,25 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include <string>
 
 #include "MessageQueue.h"
 #include "SpinLattice.h"
 #include "evaluate.h"
 #include "simulate.h"
+#include "userInput.h"
 
 int main() {
   //==================================================================================
   //   INPUT
   //----------------------------------------------------------------------------------
-  int size = 10;      // size of the lattice
-  double J = 1.;      // coupling constant
-  double B = 0.;      // external magnetic field
-  double T = 2.26;    // temperature
-  int blockSize = 50; // number of measurements in each block
-  int numBlocks =
-      100; // number of subsequent blocks which are used for error estimation
+  int size = 100;      // size of the lattice
+  double J = 1.;       // coupling constant
+  double B = 0.;       // external magnetic field
+  double T = 2.26;     // temperature
+  int blockSize = 50;  // number of measurements in each block
+  int numBlocks = 100; // number of subsequent blocks used for error estimation
+  std::string inputFileName = "../src/userInput.txt";
 
   // int num_meas = meas_sweeps / block_size;
   //----------------------------------------------------------------------------------
@@ -35,17 +37,29 @@ int main() {
   std::ofstream fCluster;
   fCluster.open("../logs/cluster_measurements.txt");
 
-  std::cout << "=======================\n";
-  std::cout << " Single cluster method\n";
-  std::cout << "=======================\n";
-  fCluster << "Single cluster method\n";
+  //==================================================================================
+  //     USER INPUT
+  //----------------------------------------------------------------------------------
+  
+  userInput(inputFileName, size, J, B, T);
+
+  //----------------------------------------------------------------------------------
+  std::cout << "\n";
+  std::cout << "=================================================\n";
+  std::cout << "Using the single cluster method\n\n";
+  std::cout << "Lattice size: " << size << "\n";
+  std::cout << "Coupling constant J: " << J << "\n";
+  std::cout << "External magnetic field B: " << B << "\n";
+  std::cout << "Temperature: " << T << "K\n";
+  std::cout << "=================================================\n";
+
 
   auto queue = MessageQueue<std::vector<double>>();
   std::vector<double> parameters{J, B, T};
 
   std::thread simulationThread(&simulate, &lattice, parameters, blockSize,
                                &queue);
-  std::thread evaluationThread(&evaluate, parameters, &queue);
+  std::thread evaluationThread(&evaluate, parameters, numBlocks, size, &queue);
 
   simulationThread.join();
   evaluationThread.join();
