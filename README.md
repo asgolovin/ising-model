@@ -1,6 +1,6 @@
 # 2D Ising model
 
-This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] The project is done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree.
+This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] The project has been done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree course.
 
 ## Dependencies for Running Locally
 * OpenCV >= 4.1
