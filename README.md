@@ -1,10 +1,10 @@
 # 2D Ising model
 
-This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] The project is done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree.
+This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] The project has been done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree course.
 
 ## Dependencies for Running Locally
-* cmake >= 2.8
-  * All OSes: [click here for installation instructions](https://cmake.org/install/)
+* OpenCV >= 4.1
+  * The OpenCV 4.1.0 source code can be found [here](https://github.com/opencv/opencv/tree/4.1.0)
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1 (Linux, Mac), 3.81 (Windows)
@@ -37,8 +37,8 @@ High temperature introduces chaos into the system. Even if the parallel orientat
 
 ([image source](https://en.wikipedia.org/wiki/Curie_temperature))
 
-The Ising model is a simple model that can describe phase transition from a paramagnetic unodrered state
-to a ferromagnetic ordered state. In the model, the magnetic moments are binary and can only point up (+1) or down (-1). Magnetic moments sit on a 2D lattice, their interaction with neighbors is described by the coupling constant `J`. 
+The Ising model is a simple model that can describe phase transition from an ordered state
+to an unodrered state. In the model, the magnetic moments (we will also call them spins) are binary and can only point up (+1) or down (-1). Magnetic moments sit on a 2D lattice, their interaction with neighbors is described by the coupling constant `J`. 
 
 * `J > 0`: parallel orientation is preferable
 * `J < 0`: antiparallel orientation is preferable
@@ -56,27 +56,27 @@ First, the user is asked to enter input parameters: the size of the lattice, the
 
 After that, it launches three threads for simulation, evaluation and display. The lattice is passed by pointer to the simulation thread and the display thread. Additionally, the simulation and evaluation threads communicate with each other through a `MessageQueue`. 
 
-### Simulation thread
+### Simulation Thread
 
 The simulation algorithm runs the single cluster algorithm in an infinite while-loop. It modifies the lattice and takes measurements of the energy density and magnetization. After a given number of simulation steps, averaged measurements are sent via `MessageQueue` to the evaluation thread. 
 
 The single cluster algorithm selects a cluster of spins, i.e., connected spins with the same orientation, and flips each spin from the cluster with a probability which depends on the physical parameters of the system. 
 
-### Evaluation thread
+### Evaluation Thread
 
-The evaluation thread waits for a message from the `MessageQueue`. Once measurements are available, it pulls all new measurements from the queue and saves them. Old measurements are discarded to speed up the calculations. 
+The evaluation thread waits for a message from the `MessageQueue`. Once measurements are available, it pulls all new measurements from the queue and saves them. Only the most recent 100 measurements are used, older measurements are discarded to speed up the calculations.
 
-First, the average energy and magnetization density are computed by taking the average of all recent measurements. Then, the [Jackknife algorithm](https://en.wikipedia.org/wiki/Jackknife_resampling) is performed on both measurement vectors to estimate the variance of the measurements. The estimated error is then given by the square root of the variance. 
+First, the average energy and magnetization density are computed by taking the average of all recent measurements. Then, the [Jackknife algorithm](https://en.wikipedia.org/wiki/Jackknife_resampling) is performed on both measurement vectors to estimate the variance of the measurements. The estimated error is equal to the square root of the variance. 
 
-### Display thread
+### Display Thread
 
 The display thread repeatedly calls the `SpinLattice::updateMat(cv::Mat &image)` method of the lattice, which writes the values of the lattice into an OpenCV matrix. This matrix is then displayed using the `cv::imshow()` function.
 
-### Expected behavior
+### Expected Behavior
 
 After the user enters starting parameters, the simulation starts. The current state of the lattice is shown in an additional window. Measuruments are outputed to the console each second. It can take some time for the simulation to collect enough data for error estimation.
 
-## Rubric points
+## Rubric Points
 
 * The project demonstrates an understanding of C++ functions and control structures.
 * The project reads data from a file and process the data, or the program writes data to a file. 
