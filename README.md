@@ -66,7 +66,7 @@ The single cluster algorithm selects a cluster of spins, i.e., connected spins w
 
 The evaluation thread waits for a message from the `MessageQueue`. Once measurements are available, it pulls all new measurements from the queue and saves them. Old measurements are discarded to speed up the calculations. 
 
-First, the average energy and magnetization density are computed by taking the average of all recent measurements. Then, the [Jackknife algorithm](https://en.wikipedia.org/wiki/Jackknife_resampling) is performed on both measurement vectors to estimate the variance of the measurements. The estimated error is then given by the square root of the variance. 
+First, the average energy and magnetization density are computed by taking the average of all recent measurements. Then, the [Jackknife algorithm](https://en.wikipedia.org/wiki/Jackknife_resampling) is performed on both measurement vectors to estimate the variance of the measurements. The estimated error is equal to the square root of the variance. 
 
 ### Display Thread
 
