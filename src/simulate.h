@@ -10,10 +10,6 @@ void simulate(SpinLattice *lattice, std::vector<double> parameters,
               int blockSize, MessageQueue<std::vector<double>> *queue);
 
 
-std::array<std::array<int, 2>, 4> coordinatesOfNeighbors(int m, int n,
-                                                         int size);
-
-
-void plotStuff();
+std::array<std::array<int, 2>, 4> coordinatesOfNeighbors(int m, int n, int size);
 
 #endif

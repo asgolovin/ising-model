@@ -15,11 +15,11 @@ public:
   }
 
   std::vector<T> receive() {
-    std::vector <T> msg;
+    std::vector<T> msg;
     std::unique_lock<std::mutex> uLock(_mutex);
     _cond.wait(uLock, [this] { return !_queue.empty(); });
     // return all new messages
-    for (int i = 0; i < _queue.size(); i++){
+    for (int i = 0; i < _queue.size(); i++) {
       msg.emplace_back(std::move(_queue.front()));
       _queue.pop_front();
     }

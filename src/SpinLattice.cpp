@@ -1,8 +1,8 @@
 #include <iostream>
-#include <random>
-#include <vector>
 #include <mutex>
 #include <opencv2/core.hpp>
+#include <random>
+#include <vector>
 
 #include "MessageQueue.h"
 #include "SpinLattice.h"
@@ -57,7 +57,7 @@ double SpinLattice::getEnergy(double J, double B) {
       int right = (j + _size + 1) % _size;
       // add up the energy of single spins
       energy += _lattice[i][j] *
-                       (-1. * J * (_lattice[up][j] + _lattice[i][right]) + B);
+                (-1. * J * (_lattice[up][j] + _lattice[i][right]) + B);
     }
   }
   return energy / (_size * _size);
@@ -66,13 +66,12 @@ double SpinLattice::getEnergy(double J, double B) {
 // Flip the spin at position (i, j)
 void SpinLattice::flip(int i, int j) { _lattice[i][j] *= -1; }
 
-
 // Updates an OpenCV 8-bit 1 channel matrix (CV_8SC1)
-void SpinLattice::updateMat(cv::Mat &image){
+void SpinLattice::updateMat(cv::Mat &image) {
   std::lock_guard<std::mutex> lock(_mutex);
-  for(int i=0; i<_size; ++i){
-    for(int j=0; j<_size; ++j){
-        image.at<schar>(i, j) = _lattice[i][j] * 127;
+  for (int i = 0; i < _size; ++i) {
+    for (int j = 0; j < _size; ++j) {
+      image.at<schar>(i, j) = _lattice[i][j] * 127;
     }
   }
 }

@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <mutex>
-#include <vector>
 #include <opencv2/core.hpp>
+#include <vector>
 
 #include "MessageQueue.h"
 
