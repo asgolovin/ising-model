@@ -56,27 +56,27 @@ First, the user is asked to enter input parameters: the size of the lattice, the
 
 After that, it launches three threads for simulation, evaluation and display. The lattice is passed by pointer to the simulation thread and the display thread. Additionally, the simulation and evaluation threads communicate with each other through a `MessageQueue`. 
 
-### Simulation thread
+### Simulation Thread
 
 The simulation algorithm runs the single cluster algorithm in an infinite while-loop. It modifies the lattice and takes measurements of the energy density and magnetization. After a given number of simulation steps, averaged measurements are sent via `MessageQueue` to the evaluation thread. 
 
 The single cluster algorithm selects a cluster of spins, i.e., connected spins with the same orientation, and flips each spin from the cluster with a probability which depends on the physical parameters of the system. 
 
-### Evaluation thread
+### Evaluation Thread
 
 The evaluation thread waits for a message from the `MessageQueue`. Once measurements are available, it pulls all new measurements from the queue and saves them. Old measurements are discarded to speed up the calculations. 
 
 First, the average energy and magnetization density are computed by taking the average of all recent measurements. Then, the [Jackknife algorithm](https://en.wikipedia.org/wiki/Jackknife_resampling) is performed on both measurement vectors to estimate the variance of the measurements. The estimated error is then given by the square root of the variance. 
 
-### Display thread
+### Display Thread
 
 The display thread repeatedly calls the `SpinLattice::updateMat(cv::Mat &image)` method of the lattice, which writes the values of the lattice into an OpenCV matrix. This matrix is then displayed using the `cv::imshow()` function.
 
-### Expected behavior
+### Expected Behavior
 
 After the user enters starting parameters, the simulation starts. The current state of the lattice is shown in an additional window. Measuruments are outputed to the console each second. It can take some time for the simulation to collect enough data for error estimation.
 
-## Rubric points
+## Rubric Points
 
 * The project demonstrates an understanding of C++ functions and control structures.
 * The project reads data from a file and process the data, or the program writes data to a file. 
