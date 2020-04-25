@@ -1,23 +1,23 @@
-Hi, welcome to the Ising simulation! The Ising model is a simple model of a ferromagnet. 
-It consists of binary magnets - we will call them spins - on a 2D lattice. 
+Hi, welcome to the Ising simulation! The Ising model is a simple model of a ferromagnet used in
+solid state physics. It consists of binary magnets - we will call them spins - on a 2D lattice. 
 
 A single spin can point either up (+1) or down (-1). If an external magnetic field is present, 
 the spin wants to line up with the field.
 
-Furthermore, every spin interacts with its neighbors. This interaction is described by 
+Furthermore, each spin interacts with its neighbors. This interaction is described by 
 the coupling constant J. If J is larger than 0, neighboring spins try to point in the same 
 direction and produce a magnetic field on their own. 
-Such materials are called ferromagnets.
+Such materials are called ferromagnetic. The magnets on your fridge are exactly that!
 
 If J is smaller than 0, neighboring spins prefer to point in opposite directions and their 
 magnetic fields cancel each other out. 
-Such materials are called antiferromagnets. 
+Such materials are called antiferromagnetic.
  
 That's all there is to it! The Ising model is quite simple, but very powerful. If you want 
 to learn more, the Wikipedia article is very comprehensive: 
 https://en.wikipedia.org/wiki/Ising_model
 @
-Let's start! Please enter the size of the lattice (10-200)
+Let's start! Please enter the size of the lattice (10-300)
 @
 Now set the coupling constant J in the range from -1 to +1.
 J > 0: ferromagnet

@@ -11,7 +11,7 @@ void userInput(std::string filename, int &size, double &J, double &B, double &T)
   std::vector<std::string> msg;
   std::ifstream file(filename);
   std::string input;
-  // check for file availability and process it line by line
+  // check for file availability
   if (file) {
     // loop over all lines in the file
     std::string lineStr;
@@ -24,7 +24,7 @@ void userInput(std::string filename, int &size, double &J, double &B, double &T)
     std::cout << msg[1];
     getline(std::cin, input);
     std::stringstream(input) >> size;
-    while (size > 200 || size < 10){
+    while (size > 300 || size < 10){
         std::cout << "Wrong input! Enter a number between 10 and 200:\n";
         getline(std::cin, input);
         std::stringstream(input) >> size;
@@ -60,7 +60,7 @@ void userInput(std::string filename, int &size, double &J, double &B, double &T)
     std::cout << msg[5];
   }
   else {
-      std::cout << "Couldn't open input file\n";
+      std::cout << "Couldn't open input file :(\nLoading defalt values\n";
   }
 }
       

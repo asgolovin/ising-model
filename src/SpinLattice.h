@@ -4,14 +4,12 @@
 #include <memory>
 #include <mutex>
 #include <vector>
+#include <opencv2/core.hpp>
 
 #include "MessageQueue.h"
 
 class SpinLattice {
 public:
-  
-  std::vector<std::vector<int>> _lattice;
-
   // constructor / destructor
   SpinLattice(int size);
   ~SpinLattice() {}
@@ -26,12 +24,14 @@ public:
 
   // lattice manipulation
   void flip(int i, int j);
-  void simulate(std::vector<double> parameters, int blockSize,
-                MessageQueue<std::vector<double>> *queue);
+
+  // graphics
+  void updateMat(cv::Mat &image);
 
 private:
   int _size;
   std::mutex _mutex;
+  std::vector<std::vector<int>> _lattice;
 };
 
 #endif

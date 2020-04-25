@@ -1,17 +1,14 @@
 #include "simulate.h"
 #include "SpinLattice.h"
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/core/mat.hpp>
 #include <cmath>
 #include <array>
 #include <chrono>
 #include <random>
 #include <thread>
+#include <iostream>
 
 using std::vector;
 using std::array;
-using namespace cv;
 
 
 void simulate(SpinLattice *lattice, vector<double> parameters,
@@ -35,20 +32,6 @@ void simulate(SpinLattice *lattice, vector<double> parameters,
   std::mt19937 rng(rd());
   std::uniform_int_distribution<int> intDstr(0, size - 1);
   std::uniform_real_distribution<float> floatDstr(0, 1);
-
-  // Display the lattice
-  /*
-  const char* window_name = "Test";
-  //cv::Mat image(lattice->_lattice.size(), (lattice->_lattice).at(0).size(), CV_8SC1);
-  Mat image = Mat::eye(10, 10, CV_8SC1);
-
-  for(int i=0; i<image.rows; ++i)
-     for(int j=0; j<image.cols; ++j)
-          image.at<double>(i, j) = (lattice->_lattice).at(i).at(j);
-  namedWindow(window_name, WINDOW_AUTOSIZE );
-  imshow(window_name, image);
-*/
-  // End display
 
   while (true) {
     counter++;
