@@ -30,6 +30,12 @@ If you take a refrigerator magnet and heat it up, it will suddenly lose its magn
 Some atoms in materials have a magnetic moment - imagine tiny magnets sitting inside the material and interacting with each other. The kind of interaction depends on the properties of the material. In some cases, it is energetically favorable for magnetic moments to align parallel to each other. If the interaction is so strong that most magnetic moments point in the same direction, then the whole material becomes a magnet. 
 
 High temperature introduces chaos into the system. Even if the parallel orientation is energetically favorable, it is just one configuration out of a huge number of possibilities. If the temperature becomes high enough, chaos overcomes order and the material undergoes a phase transition.
+ 
+| <img src="ferromagnet.png" width="300"/> | <img src="paramagnet.png" width="300"/> |
+|:---: |:---:|
+| Below the critical temperature | Above the critical temperature  | 
+
+([image source](https://en.wikipedia.org/wiki/Curie_temperature))
 
 The Ising model is a simple model that can describe phase transition from a paramagnetic unodrered state
 to a ferromagnetic ordered state. In the model, the magnetic moments are binary and can only point up (+1) or down (-1). Magnetic moments sit on a 2D lattice, their interaction with neighbors is described by the coupling constant `J`. 
@@ -37,9 +43,9 @@ to a ferromagnetic ordered state. In the model, the magnetic moments are binary 
 * `J > 0`: parallel orientation is preferable
 * `J < 0`: antiparallel orientation is preferable
 
-If an external magnetic field `B` is present, magnetic moments react to that and try to align parallel to it. 
+If an external magnetic field `B` is present, magnetic moments additionally try to align parallel to it. 
 
-If `J > 0` and the temperature is below the critical value, there will be more moments pointing in one direction than the other. 
+If `J > 0` and the temperature is below the critical value, there will be more moments pointing in one direction than the other and the material will become a magnet. 
 
 ## Things to Try Out
 
