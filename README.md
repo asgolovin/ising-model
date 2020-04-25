@@ -1,6 +1,6 @@
 # 2D Ising model
 
-This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] The project has been done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree course.
+This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics. The project has been done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree course.
 
 ## Dependencies for Running Locally
 * OpenCV >= 4.1
@@ -52,15 +52,17 @@ If `J > 0` and the temperature is below the critical value, there will be more m
 
 The program makes use of concurrency to simultaneously update the lattice and evaluate and display results. It is structured around the `SpinLattice` object, which is used to represent and modify the lattice. All methods which read or modify the lattice are protected by a private mutex and `guard_lock`s to enable concurrent programming.
 
-First, the user is asked to enter input parameters: the size of the lattice, the coupling constant `J`, the magnetic field `B` and the temperature `T`. The program ensures that the given values are valid and lie in a reasonable range. 
+First, the user is asked to enter input parameters: the size of the lattice, the coupling constant `J`, the magnetic field `B` and the temperature `T`. The program ensures that the given values are valid and lie in a reasonable range. He can also choose between two simulation algoritms: the single cluster method [1] and the heat bath method.
 
 After that, it launches three threads for simulation, evaluation and display. The lattice is passed by pointer to the simulation thread and the display thread. Additionally, the simulation and evaluation threads communicate with each other through a `MessageQueue`. 
 
 ### Simulation Thread
 
-The simulation algorithm runs the single cluster algorithm in an infinite while-loop. It modifies the lattice and takes measurements of the energy density and magnetization. After a given number of simulation steps, averaged measurements are sent via `MessageQueue` to the evaluation thread. 
+The simulation algorithm runs the simulation algorithm in an infinite while-loop. It modifies the lattice and takes measurements of the energy density and magnetization. After a given number of simulation steps, averaged measurements are sent via `MessageQueue` to the evaluation thread. 
 
 The single cluster algorithm selects a cluster of spins, i.e., connected spins with the same orientation, and flips each spin from the cluster with a probability which depends on the physical parameters of the system. 
+
+The heat bath algorithm selects one random spin and sets its value randomly. The probability depends on the energy contribution of the spin.
 
 ### Evaluation Thread
 
@@ -97,10 +99,6 @@ After the user enters starting parameters, the simulation starts. The current st
 * If `J = 1.` and `B = 0.`, then the critical temperature for an infinite lattice is approximately equal to `T = 2.26`. The average magnetization density should vanish above that point and be larger than zero below. 
 * If `J < 0`, the neighbors will try to point in opposite directions. Such materials are called antiferromagnets. Although the average magnetization cancels out, antiferromagnets still undergo a phase transition from an ordered state to an unordered - it is just not very noticeable from the outside.
 * If `B > 0`, the material will be magnetic even at high temperatures. Such materials are called paramagnets.
-
-## Issues
-
-I started with the single cluster method because it is cool and gives fast results, but realized much later that it's very unsuitable for visualization, since many spins flip at once at each step. Well. :D A heat bath algorithm would be prettier. 
 
 ## References
 
