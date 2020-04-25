@@ -1,6 +1,6 @@
 # 2D Ising model
 
-This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] 
+This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics, using the single cluster algorithm. [1] The project is done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree.
 
 ## Dependencies for Running Locally
 * cmake >= 2.8
@@ -47,13 +47,58 @@ If an external magnetic field `B` is present, magnetic moments additionally try 
 
 If `J > 0` and the temperature is below the critical value, there will be more moments pointing in one direction than the other and the material will become a magnet. 
 
+
+## Code Structure
+
+The program makes use of concurrency to simultaneously update the lattice and evaluate and display results. It is structured around the `SpinLattice` object, which is used to represent and modify the lattice. All methods which read or modify the lattice are protected by a private mutex and `guard_lock`s to enable concurrent programming.
+
+First, the user is asked to enter input parameters: the size of the lattice, the coupling constant `J`, the magnetic field `B` and the temperature `T`. The program ensures that the given values are valid and lie in a reasonable range. 
+
+After that, it launches three threads for simulation, evaluation and display. The lattice is passed by pointer to the simulation thread and the display thread. Additionally, the simulation and evaluation threads communicate with each other through a `MessageQueue`. 
+
+### Simulation thread
+
+The simulation algorithm runs the single cluster algorithm in an infinite while-loop. It modifies the lattice and takes measurements of the energy density and magnetization. After a given number of simulation steps, averaged measurements are sent via `MessageQueue` to the evaluation thread. 
+
+The single cluster algorithm selects a cluster of spins, i.e., connected spins with the same orientation, and flips each spin from the cluster with a probability which depends on the physical parameters of the system. 
+
+### Evaluation thread
+
+The evaluation thread waits for a message from the `MessageQueue`. Once measurements are available, it pulls all new measurements from the queue and saves them. Old measurements are discarded to speed up the calculations. 
+
+First, the average energy and magnetization density are computed by taking the average of all recent measurements. Then, the [Jackknife algorithm](https://en.wikipedia.org/wiki/Jackknife_resampling) is performed on both measurement vectors to estimate the variance of the measurements. The estimated error is then given by the square root of the variance. 
+
+### Display thread
+
+The display thread repeatedly calls the `SpinLattice::updateMat(cv::Mat &image)` method of the lattice, which writes the values of the lattice into an OpenCV matrix. This matrix is then displayed using the `cv::imshow()` function.
+
+### Expected behavior
+
+After the user enters starting parameters, the simulation starts. The current state of the lattice is shown in an additional window. Measuruments are outputed to the console each second. It can take some time for the simulation to collect enough data for error estimation.
+
+## Rubric points
+
+* The project demonstrates an understanding of C++ functions and control structures.
+* The project reads data from a file and process the data, or the program writes data to a file. 
+  * See `userInput.cpp` file, lines `12-20`.
+* The project accepts user input and processes the input.
+  * See `userInput.cpp` file, lines `21-60`
+* The project makes use of references in function declarations.
+  * See `spinLattice.cpp` file, line `70`, `userInput.cpp` file, line `9`
+* The project uses multithreading.
+  * See `main.cpp` file, lines `47-53`
+* A mutex or lock is used in the project.
+  * See `SpinLattice.cpp` file, lines `21`, `33`, `49`, `68`, `74`
+* A condition variable is used in the project.
+  * See `MessageQueue.h` file, line `14`
+
 ## Things to Try Out
 
 * If `J = 1.` and `B = 0.`, then the critical temperature for an infinite lattice is approximately equal to `T = 2.26`. The average magnetization density should vanish above that point and be larger than zero below. 
 * If `J < 0`, the neighbors will try to point in opposite directions. Such materials are called antiferromagnets. Although the average magnetization cancels out, antiferromagnets still undergo a phase transition from an ordered state to an unordered - it is just not very noticeable from the outside.
 * If `B > 0`, the material will be magnetic even at high temperatures. Such materials are called paramagnets.
 
-## To Do
+## Issues
 
 I started with the single cluster method because it is cool and gives fast results, but realized much later that it's very unsuitable for visualization, since many spins flip at once at each step. Well. :D A heat bath algorithm would be prettier. 
 
