@@ -1,6 +1,6 @@
 # 2D Ising model
 
-This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics. The project has been done for the [Udacity C++](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) Nanodegree course.
+This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics.
 
 ## Dependencies for Running Locally
 * OpenCV >= 4.1
@@ -76,23 +76,7 @@ The display thread repeatedly calls the `SpinLattice::updateMat(cv::Mat &image)`
 
 ### Expected Behavior
 
-After the user enters starting parameters, the simulation starts. The current state of the lattice is shown in an additional window. Measuruments are outputed to the console each second. It can take some time for the simulation to collect enough data for error estimation.
-
-## Rubric Points
-
-* The project demonstrates an understanding of C++ functions and control structures.
-* The project reads data from a file and process the data, or the program writes data to a file. 
-  * See `userInput.cpp` file, lines `12-20`.
-* The project accepts user input and processes the input.
-  * See `userInput.cpp` file, lines `21-60`
-* The project makes use of references in function declarations.
-  * See `spinLattice.cpp` file, line `70`, `userInput.cpp` file, line `9`
-* The project uses multithreading.
-  * See `main.cpp` file, lines `47-53`
-* A mutex or lock is used in the project.
-  * See `SpinLattice.cpp` file, lines `21`, `33`, `49`, `68`, `74`
-* A condition variable is used in the project.
-  * See `MessageQueue.h` file, line `14`
+After the user enters starting parameters, the simulation starts. The current state of the lattice is shown in an additional window. Measuruments are outputed to the console each second. It can take some time for the simulation to collect enough data for error estimation. 
 
 ## Things to Try Out
 
