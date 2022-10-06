@@ -2,6 +2,14 @@
 
 This is a simulation of the 2D [Ising Model](https://en.wikipedia.org/wiki/Ising_model), a simple model of ferromagnetism in solid state physics.
 
+<div align="center">
+<figure>
+<img src="ising_recording.gif" width="300"/>
+<br>
+<figcaption align = "center"><b>The Ising model at a temperature T = 2.26 K close to the critical point.</b></figcaption>
+</figure>
+</div>
+
 ## Dependencies for Running Locally
 * OpenCV >= 4.1
   * The OpenCV 4.1.0 source code can be found [here](https://github.com/opencv/opencv/tree/4.1.0)
